@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- 이메일 입력 -->
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="emailAddress"
+        android:hint="@string/email_hint"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="75dp" />
+
+    <!-- 인증번호 발송 버튼 -->
+    <Button
+        android:id="@+id/buttonSendVerificationCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/send_verification_code"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/editTextEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- 인증번호 입력 / 인증번호의 경우 자동 완성 힌트 제공 X -->
+    <EditText
+        android:id="@+id/editTextVerificationCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/verification_code_hint"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/buttonSendVerificationCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- 아이디 찾기 버튼 -->
+    <Button
+        android:id="@+id/buttonFindID"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/find_id"
+        app:layout_constraintTop_toBottomOf="@id/editTextVerificationCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
