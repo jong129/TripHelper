@@ -11,7 +11,6 @@
         android:id="@+id/editTextEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:autofillHints="emailAddress"
         android:hint="@string/email_hint"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
