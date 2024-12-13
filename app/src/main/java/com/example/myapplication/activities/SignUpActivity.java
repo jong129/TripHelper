@@ -85,8 +85,26 @@ public class SignUpActivity extends AppCompatActivity {
 
     // 인증번호 요청
     private void sendVerificationCode(String email) {
-        VerificationRequest request = new VerificationRequest(email);
+        // ID 가져오기
+        EditText editTextID = findViewById(R.id.editTextID);
+        String userId = editTextID.getText().toString().trim();
 
+        // ID 검증
+        if (TextUtils.isEmpty(userId)) {
+            showToast("아이디를 입력해주세요.");
+            return;
+        }
+
+        // 이메일 검증
+        if (TextUtils.isEmpty(email)) {
+            showToast("이메일을 입력해주세요.");
+            return;
+        }
+
+        // VerificationRequest 생성
+        VerificationRequest request = new VerificationRequest(userId, email);
+
+        // 서버로 요청 전송
         RetrofitClient.getApiService().sendVerificationCode(request).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<VerificationResponse> call, @NonNull Response<VerificationResponse> response) {
@@ -104,6 +122,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
 
     // ID 중복 확인 요청
     private void checkID(String id) {
