@@ -12,6 +12,8 @@ import com.example.myapplication.api.requests.FindIDRequest;
 import com.example.myapplication.api.responses.FindIDResponse;
 import com.example.myapplication.api.requests.FindPasswordRequest;
 import com.example.myapplication.api.responses.FindPasswordResponse;
+import com.example.myapplication.api.requests.ChangePasswordRequest;
+import com.example.myapplication.api.responses.ChangePasswordResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -41,4 +43,8 @@ public interface ApiService {
 
     @POST("/api/reset-password")
     Call<FindPasswordResponse> resetPassword(@Body FindPasswordRequest request);
+
+    @POST("/api/change-password")
+    Call<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
+
 }
