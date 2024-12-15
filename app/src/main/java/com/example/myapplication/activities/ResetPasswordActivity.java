@@ -66,6 +66,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     // 입력값 검증
+    // 입력값 검증
     private boolean validateInputs(String userId, String email, String verificationCode, String oldPassword, String newPassword, String confirmNewPassword) {
         if (TextUtils.isEmpty(userId)) {
             showToast("아이디를 입력해주세요.");
@@ -91,12 +92,17 @@ public class ResetPasswordActivity extends AppCompatActivity {
             showToast("새 비밀번호 확인을 입력해주세요.");
             return false;
         }
+        if (newPassword.equals(oldPassword)) {
+            showToast("새 비밀번호가 기존 비밀번호와 같습니다.");
+            return false;
+        }
         if (!newPassword.equals(confirmNewPassword)) {
-            showToast("새 비밀번호가 일치하지 않습니다.");
+            showToast("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
             return false;
         }
         return true;
     }
+
 
     // 이메일 인증번호 요청
     private void sendVerificationCode(String email) {
