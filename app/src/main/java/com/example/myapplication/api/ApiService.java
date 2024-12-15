@@ -14,6 +14,8 @@ import com.example.myapplication.api.requests.FindPasswordRequest;
 import com.example.myapplication.api.responses.FindPasswordResponse;
 import com.example.myapplication.api.requests.ChangePasswordRequest;
 import com.example.myapplication.api.responses.ChangePasswordResponse;
+import com.example.myapplication.api.requests.RecommendRequest;
+import com.example.myapplication.api.responses.RecommendResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -46,5 +48,8 @@ public interface ApiService {
 
     @POST("/api/change-password")
     Call<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
+
+    @POST("/api/recommend") // 서버의 추천 API 엔드포인트
+    Call<RecommendResponse> getRecommendations(@Body RecommendRequest request);
 
 }
