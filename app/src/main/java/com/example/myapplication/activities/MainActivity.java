@@ -36,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
         // View 연결
         EditText editTextID = findViewById(R.id.editTextID); // ID 입력 필드
         EditText editTextPassword = findViewById(R.id.editTextPassword); // 비밀번호 입력 필드
-        Button buttonLogin = findViewById(R.id.buttonLogin);
-        Button buttonSignUp = findViewById(R.id.buttonSignUp);
-
+        Button buttonLogin = findViewById(R.id.buttonLogin); // 로그인 버튼
+        Button buttonSignUp = findViewById(R.id.buttonSignUp); // 회원가입 버튼
         Button buttonFindID = findViewById(R.id.buttonFindID); // 아이디 찾기 버튼
         Button buttonFindPassword = findViewById(R.id.buttonFindPassword); // 비밀번호 찾기 버튼
 
