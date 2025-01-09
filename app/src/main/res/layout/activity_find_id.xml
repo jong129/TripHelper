@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- 인증번호 입력 / 인증번호의 경우 자동 완성 힌트 제공 X -->
+    <!-- 인증번호 입력 -->
     <EditText
         android:id="@+id/editTextVerificationCode"
         android:layout_width="0dp"
@@ -42,15 +42,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
+    <Button
+        android:id="@+id/buttonVerifyCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/button_verify_code"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextVerificationCode"
+        android:layout_marginTop="16dp" />
+
     <!-- 아이디 찾기 버튼 -->
     <Button
         android:id="@+id/buttonFindID"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/find_id"
-        app:layout_constraintTop_toBottomOf="@id/editTextVerificationCode"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonVerifyCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
