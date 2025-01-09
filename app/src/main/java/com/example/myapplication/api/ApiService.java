@@ -23,7 +23,10 @@ import retrofit2.http.POST;
 
 public interface ApiService {
     @POST("/api/send-verification-code")
-    Call<VerificationResponse> sendVerificationCode(@Body VerificationRequest request);
+    Call<VerificationResponse> sendVerificationCode(@Body VerificationRequest request); // 인증번호 요청
+
+    @POST("/api/verify-code")
+    Call<VerificationResponse> verifyCode(@Body VerificationRequest request); // 인증번호 검증
 
     @POST("/api/login")
     Call<LoginResponse> login(@Body LoginRequest request);
@@ -35,13 +38,13 @@ public interface ApiService {
     Call<SignUpResponse> signUp(@Body SignUpRequest request);
 
     @POST("/api/send-verification-code/id")
-    Call<Void> sendIDVerificationCode(@Body FindIDRequest request);
+    Call<Void> sendIDVerificationCode(@Body FindIDRequest request); // 아이디 찾기 인증
 
     @POST("/api/find-id")
     Call<FindIDResponse> findID(@Body FindIDRequest request);
 
     @POST("/api/send-verification-code/password")
-    Call<Void> sendPasswordVerificationCode(@Body FindPasswordRequest request);
+    Call<Void> sendPasswordVerificationCode(@Body FindPasswordRequest request); // 비밀번호 재설정 인증
 
     @POST("/api/reset-password")
     Call<FindPasswordResponse> resetPassword(@Body FindPasswordRequest request);
