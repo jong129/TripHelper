@@ -1,6 +1,7 @@
 package com.example.myapplication.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -19,26 +20,30 @@ public class ManageAccountActivity extends AppCompatActivity {
         Button buttonLogout = findViewById(R.id.buttonLogout);
 
         // 비밀번호 재설정 버튼 클릭 이벤트
-        buttonResetPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(ManageAccountActivity.this, ResetPasswordActivity.class);
-            startActivity(intent);
-        });
+        buttonResetPassword.setOnClickListener(v -> startActivity(new Intent(ManageAccountActivity.this, ResetPasswordActivity.class)));
 
         // 로그아웃 버튼 클릭 이벤트
-        buttonLogout.setOnClickListener(v -> {
-            // 로그아웃 처리 (예: SharedPreferences 초기화, 세션 종료 등)
-            Toast.makeText(ManageAccountActivity.this, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
+        if (buttonLogout != null) { // 버튼이 null이 아닌 경우에만 설정
+            buttonLogout.setOnClickListener(v -> performLogout());
+        }
+    }
 
-            // 메인 화면으로 이동
-            Intent intent = new Intent(ManageAccountActivity.this, MainActivity.class);
+    private void performLogout() {
+        // SharedPreferences 초기화 (세션 삭제)
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
 
-            // 플래그 설정: 이전 모든 액티비티를 종료하고 새 작업 시작
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // 로그아웃 메시지
+        Toast.makeText(ManageAccountActivity.this, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
 
-            startActivity(intent);
+        // 메인 화면으로 이동
+        Intent intent = new Intent(ManageAccountActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
 
-            // 현재 액티비티 종료
-            finish();
-        });
+        // 현재 액티비티 종료
+        finish();
     }
 }

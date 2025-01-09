@@ -36,6 +36,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         // 버튼을 지역 변수로 선언
         Button buttonSendVerificationCode = findViewById(R.id.buttonSendVerificationCode);
+        Button buttonVerifyCode = findViewById(R.id.buttonVerifyCode);
         Button buttonChangePassword = findViewById(R.id.buttonChangePassword);
 
         // 이메일 인증번호 발송 버튼 클릭 이벤트
@@ -48,6 +49,19 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
             sendVerificationCode(email);
+        });
+
+        // 인증번호 검증 버튼 클릭 이벤트
+        buttonVerifyCode.setOnClickListener(v -> {
+            String email = editTextEmail.getText().toString().trim();
+            String code = editTextVerificationCode.getText().toString().trim();
+
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(code)) {
+                showToast("이메일과 인증번호를 입력해주세요.");
+                return;
+            }
+
+            verifyCode(email, code);
         });
 
         // 비밀번호 변경 버튼 클릭 이벤트
@@ -65,8 +79,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
     }
 
-    // 입력값 검증
-    // 입력값 검증
     private boolean validateInputs(String userId, String email, String verificationCode, String oldPassword, String newPassword, String confirmNewPassword) {
         if (TextUtils.isEmpty(userId)) {
             showToast("아이디를 입력해주세요.");
@@ -103,10 +115,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
         return true;
     }
 
-
-    // 이메일 인증번호 요청
     private void sendVerificationCode(String email) {
-        VerificationRequest request = new VerificationRequest(email); // email만 사용
+        VerificationRequest request = new VerificationRequest(email);
 
         RetrofitClient.getApiService().sendVerificationCode(request).enqueue(new Callback<>() {
             @Override
@@ -125,8 +135,26 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
     }
 
+    private void verifyCode(String email, String code) {
+        VerificationRequest request = new VerificationRequest(email, code);
 
-    // 비밀번호 변경 요청
+        RetrofitClient.getApiService().verifyCode(request).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<VerificationResponse> call, @NonNull Response<VerificationResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    showToast("인증 성공!");
+                } else {
+                    showToast("인증 실패: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<VerificationResponse> call, @NonNull Throwable t) {
+                showToast("네트워크 오류: " + t.getMessage());
+            }
+        });
+    }
+
     private void changePassword(String userId, String email, String verificationCode, String oldPassword, String newPassword) {
         ChangePasswordRequest request = new ChangePasswordRequest(userId, email, verificationCode, oldPassword, newPassword);
 

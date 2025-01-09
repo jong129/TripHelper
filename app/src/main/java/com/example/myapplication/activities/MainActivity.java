@@ -1,6 +1,7 @@
 package com.example.myapplication.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +32,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        // 세션 확인 후 메인 화면으로 이동
+        if (isUserLoggedIn()) {
+            navigateToHomeScreen();
+            return;
+        }
+
+        setContentView(R.layout.activity_login);
 
         // View 연결
         EditText editTextID = findViewById(R.id.editTextID); // ID 입력 필드
@@ -57,18 +65,18 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
             startActivity(intent);
         });
+
         // 아이디 찾기 버튼 클릭 이벤트
         buttonFindID.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, FindIDActivity.class);
             startActivity(intent);
         });
 
-// 비밀번호 찾기 버튼 클릭 이벤트
+        // 비밀번호 찾기 버튼 클릭 이벤트
         buttonFindPassword.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, FindPasswordActivity.class);
             startActivity(intent);
         });
-
     }
 
     // 입력 데이터 검증
@@ -95,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().isSuccess()) {
+                        Log.d(TAG, "Navigating to HomeActivity...");
                         Toast.makeText(MainActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+                        saveSession(userId, response.body().getToken());
                         navigateToHomeScreen();
                     } else {
                         Toast.makeText(MainActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -111,6 +121,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "네트워크 오류", t);
             }
         });
+    }
+
+    // 로그인 세션 저장
+    private void saveSession(String userId, String token) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userId", userId);
+        editor.putString("token", token);
+        editor.apply();
+    }
+
+    // 로그인 세션 확인
+    private boolean isUserLoggedIn() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        return sharedPreferences.contains("token");
     }
 
     // 에러 응답 처리

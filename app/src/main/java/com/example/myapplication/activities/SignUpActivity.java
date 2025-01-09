@@ -41,7 +41,8 @@ public class SignUpActivity extends AppCompatActivity {
         EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirm);
         Button buttonSendVerification = findViewById(R.id.buttonSendVerification);
         Button buttonSubmitSignUp = findViewById(R.id.buttonSubmitSignUp);
-        Button buttonCheckID = findViewById(R.id.buttonCheckID); // ID 중복 확인 버튼
+        Button buttonCheckID = findViewById(R.id.buttonCheckID);
+        Button buttonVerifyCode = findViewById(R.id.buttonVerifyCode);
 
         // 숫자만 입력 가능하도록 설정
         editTextVerificationCode.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -57,6 +58,17 @@ public class SignUpActivity extends AppCompatActivity {
                 return;
             }
             sendVerificationCode(email);
+        });
+
+        // 인증번호 검증 버튼 동작
+        buttonVerifyCode.setOnClickListener(v -> {
+            String email = editTextEmail.getText().toString().trim();
+            String code = editTextVerificationCode.getText().toString().trim();
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(code)) {
+                showToast("이메일과 인증번호를 입력해주세요.");
+                return;
+            }
+            verifyCode(email, code);
         });
 
         // ID 중복 확인 버튼 동작
@@ -85,31 +97,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     // 인증번호 요청
     private void sendVerificationCode(String email) {
-        // ID 가져오기
-        EditText editTextID = findViewById(R.id.editTextID);
-        String userId = editTextID.getText().toString().trim();
-
-        // ID 검증
-        if (TextUtils.isEmpty(userId)) {
-            showToast("아이디를 입력해주세요.");
-            return;
-        }
-
-        // 이메일 검증
-        if (TextUtils.isEmpty(email)) {
-            showToast("이메일을 입력해주세요.");
-            return;
-        }
-
-        // VerificationRequest 생성
-        VerificationRequest request = new VerificationRequest(userId, email);
-
-        // 서버로 요청 전송
+        VerificationRequest request = new VerificationRequest(email);
         RetrofitClient.getApiService().sendVerificationCode(request).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<VerificationResponse> call, @NonNull Response<VerificationResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    showToast("인증번호가 전송되었습니다: " + response.body().getCode());
+                    showToast("인증번호가 전송되었습니다.");
                 } else {
                     showToast("인증번호 요청 실패: " + response.code());
                 }
@@ -123,11 +116,29 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    // 인증번호 검증
+    private void verifyCode(String email, String code) {
+        VerificationRequest request = new VerificationRequest(email, code);
+        RetrofitClient.getApiService().verifyCode(request).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<VerificationResponse> call, @NonNull Response<VerificationResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    showToast("인증 성공!");
+                } else {
+                    showToast("인증 실패: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<VerificationResponse> call, @NonNull Throwable t) {
+                showToast("네트워크 오류: " + t.getMessage());
+            }
+        });
+    }
 
     // ID 중복 확인 요청
     private void checkID(String id) {
         CheckIDRequest request = new CheckIDRequest(id);
-
         RetrofitClient.getApiService().checkID(request).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<CheckIDResponse> call, @NonNull Response<CheckIDResponse> response) {
@@ -150,7 +161,6 @@ public class SignUpActivity extends AppCompatActivity {
     // 회원가입 요청
     private void sendSignUpRequest(String email, String verificationCode, String id, String password) {
         SignUpRequest request = new SignUpRequest(email, verificationCode, id, password);
-
         RetrofitClient.getApiService().signUp(request).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<SignUpResponse> call, @NonNull Response<SignUpResponse> response) {

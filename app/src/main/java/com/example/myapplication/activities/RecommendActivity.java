@@ -50,7 +50,7 @@ public class RecommendActivity extends AppCompatActivity {
         spinnerPurpose.setAdapter(adapterPurpose);
 
         // 선호 활동
-        String[] activities = {"등산", "쇼핑", "수상 스포츠", "공연 관람"};
+        String[] activities = {"등산", "쇼핑", "캠핑", "공연 관람"};
         ArrayAdapter<String> adapterActivity = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, activities);
         spinnerActivity.setAdapter(adapterActivity);
 
