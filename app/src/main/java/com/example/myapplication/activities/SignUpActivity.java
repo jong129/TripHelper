@@ -1,5 +1,6 @@
 package com.example.myapplication.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.InputFilter;
@@ -166,6 +167,12 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<SignUpResponse> call, @NonNull Response<SignUpResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     showToast("회원가입 성공: " + response.body().getMessage());
+
+                    // 로그인 화면으로 이동
+                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
                 } else {
                     showToast("회원가입 실패: " + response.code());
                 }
